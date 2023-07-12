@@ -1,0 +1,398 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Best Practice EMR Cluster for Spark application",
+    "Parameters": {
+        "EMRClusterName": {
+            "Description": "Name of the cluster",
+            "Type": "String",
+            "Default": "emrcluster"
+        },
+        "MasterInstanceType": {
+            "Description": "Instance type to be used for the master instance.",
+            "Type": "String",
+            "Default": "m5.xlarge"
+        },
+        "CoreInstanceType": {
+            "Description": "Instance type to be used for core instances.",
+            "Type": "String",
+            "Default": "m5.xlarge"
+        },
+        "NumberOfCoreInstances": {
+            "Description": "Must be a valid number",
+            "Type": "Number",
+            "Default": 1
+        },
+        "SubnetID": {
+            "Description": "Must be Valid public subnet ID",
+            "Type": "String"
+        },
+        "LogUri": {
+            "Description": "Must be a valid S3 URL",
+            "Type": "String"
+        },
+        "ReleaseLabel": {
+            "Description": "Must be a valid EMR release  version",
+            "Default": "emr-6.9.0",
+            "Type": "String"
+        },
+        "BootstrapURL": {
+            "Description": "URL to the location where the code with bootstrap actions is stored",
+            "Type": "String"
+        },
+        "Step1Name": {
+            "Description": "Name of the step 1",
+            "Type": "String",
+            "Default": "Data preprocessing"
+        },
+        "Step1InputURLShippingLogs": {
+            "Description": "URL to the location of input files",
+            "Type": "String"
+        },
+        "Step1InputURLProductDescriptions": {
+            "Description": "URL to the location of input files for Step 1",
+            "Type": "String"
+        },
+        "Step1OutputURL": {
+            "Description": "URL to the location where the output of Step 1 should be stored",
+            "Type": "String"
+        },
+        "Step1CodeFileURL": {
+            "Description": "URL to the location of files with code for Step 1",
+            "Type": "String"
+        },
+        "Step2Name": {
+            "Description": "Name of the step 2",
+            "Type": "String",
+            "Default": "Feature engineering (training)"
+        },
+        "Step2CodeFileURL": {
+            "Description": "URL to the location of fiel with code for Step 2",
+            "Type": "String"
+        },
+        "Step2InputURL": {
+            "Description": "URL to the location of input files for Step 2",
+            "Type": "String"
+        },
+        "Step2OutputURL": {
+            "Description": "URL to the location where the output of Step 2 should be stored",
+            "Type": "String"
+        },
+        "Step3Name": {
+            "Description": "Name of the step 3",
+            "Type": "String",
+            "Default": "Feature engineering (validation)"
+        },
+        "Step3CodeFileURL": {
+            "Description": "URL to the location of fiel with code for Step 3",
+            "Type": "String"
+        },
+        "Step3InputURL": {
+            "Description": "URL to the location of input files for Step 3",
+            "Type": "String"
+        },
+        "Step3OutputURL": {
+            "Description": "URL to the location where the output of Step 3 should be stored",
+            "Type": "String"
+        },
+        "Step3OutputURLModelDir": {
+            "Description": "URL to the location where the output model artefact of Step 3 should be stored",
+            "Type": "String"
+        },
+        "Step4Name": {
+            "Description": "Name of the step 4",
+            "Type": "String",
+            "Default": "Model training"
+        },
+        "Step4CodeFileURL": {
+            "Description": "URL to the location of fiel with code for Step 4",
+            "Type": "String"
+        },
+        "Step4InputURLTraining": {
+            "Description": "URL to the location of input files for Step 4",
+            "Type": "String"
+        },
+        "Step4InputURLValidation": {
+            "Description": "URL to the location of input files for Step 4",
+            "Type": "String"
+        },
+        "Step4OutputURL": {
+            "Description": "URL to the location where the output of Step 4 should be stored",
+            "Type": "String"
+        },
+        "Step4ModelType": {
+            "Description": "URL to the location where the output of Step 4 should be stored",
+            "Type": "String",
+            "Default": "gbt"
+        },
+        "Step4ModelParams": {
+            "Description": "Model parameters",
+            "Type": "String",
+            "Default": "{'maxIter': 32}"
+        }
+    },
+    "Mappings": {},
+    "Conditions": {},
+    "Resources": {
+        "EMRCluster": {
+            "DependsOn": [
+                "EMRClusterServiceRole",
+                "EMRClusterinstanceProfileRole",
+                "EMRClusterinstanceProfile"
+            ],
+            "Type": "AWS::EMR::Cluster",
+            "Properties": {
+                "Applications": [
+                    {
+                        "Name": "Spark"
+                    },
+                    {
+                        "Name": "Livy"
+                    },
+                    {
+                        "Name": "Hive"
+                    }
+                ],
+                "Instances": {
+                    "Ec2SubnetId": {
+                        "Ref": "SubnetID"
+                    },
+                    "MasterInstanceGroup": {
+                        "InstanceCount": 1,
+                        "InstanceType": {
+                            "Ref": "MasterInstanceType"
+                        },
+                        "Market": "ON_DEMAND",
+                        "Name": "Master"
+                    },
+                    "CoreInstanceGroup": {
+                        "InstanceCount": {
+                            "Ref": "NumberOfCoreInstances"
+                        },
+                        "InstanceType": {
+                            "Ref": "CoreInstanceType"
+                        },
+                        "Market": "ON_DEMAND",
+                        "Name": "Core"
+                    },
+                    "TerminationProtected": false
+                },
+                "VisibleToAllUsers": true,
+                "JobFlowRole": {
+                    "Ref": "EMRClusterinstanceProfile"
+                },
+                "ReleaseLabel": {
+                    "Ref": "ReleaseLabel"
+                },
+                "AutoTerminationPolicy": {
+                    "IdleTimeout": 180
+                },
+                "BootstrapActions": [
+                    {
+                        "Name": "Custom action",
+                        "ScriptBootstrapAction": {
+                            "Args": [],
+                            "Path": {
+                                "Ref": "BootstrapURL"
+                            }
+                        }
+                    }
+                ],
+                "ScaleDownBehavior": "TERMINATE_AT_TASK_COMPLETION",
+                "LogUri": {
+                    "Ref": "LogUri"
+                },
+                "Name": {
+                    "Ref": "EMRClusterName"
+                },
+                "AutoScalingRole": "EMR_AutoScaling_DefaultRole",
+                "ServiceRole": {
+                    "Ref": "EMRClusterServiceRole"
+                },
+                "Steps": [
+                    {
+                        "ActionOnFailure": "CONTINUE",
+                        "HadoopJarStep": {
+                            "Args": [
+                                "spark-submit",
+                                "--deploy-mode",
+                                "cluster",
+                                {
+                                    "Ref": "Step1CodeFileURL"
+                                },
+                                "--s3-shipping-logs-dir",
+                                {
+                                    "Ref": "Step1InputURLShippingLogs"
+                                },
+                                "--s3-product-description-dir",
+                                {
+                                    "Ref": "Step1InputURLProductDescriptions"
+                                },
+                                "--s3-output-dir",
+                                {
+                                    "Ref": "Step1OutputURL"
+                                }
+                            ],
+                            "Jar": "command-runner.jar",
+                        },
+                        "Name": {
+                            "Ref": "Step1Name"
+                        }
+                    },
+                    {
+                        "ActionOnFailure": "CONTINUE",
+                        "HadoopJarStep": {
+                            "Args": [
+                                "spark-submit",
+                                "--deploy-mode",
+                                "cluster",
+                                {
+                                    "Ref": "Step2CodeFileURL"
+                                },
+                                "--s3-dataframe-dir",
+                                {
+                                    "Ref": "Step2InputURL"
+                                },
+                                "--s3-output-dir",
+                                {
+                                    "Ref": "Step2OutputURL"
+                                }
+                            ],
+                            "Jar": "command-runner.jar",
+                        },
+                        "Name": {
+                            "Ref": "Step2Name"
+                        }
+                    },
+                    {
+                        "ActionOnFailure": "CONTINUE",
+                        "HadoopJarStep": {
+                            "Args": [
+                                "spark-submit",
+                                "--deploy-mode",
+                                "cluster",
+                                {
+                                    "Ref": "Step3CodeFileURL"
+                                },
+                                "--s3-dataframe-dir",
+                                {
+                                    "Ref": "Step3InputURL"
+                                },
+                                "--s3-output-dir",
+                                {
+                                    "Ref": "Step3OutputURL"
+                                },
+                                "--s3-pipeline-model-dir",
+                                {
+                                    "Ref": "Step3OutputURLModelDir"
+                                },
+                            ],
+                            "Jar": "command-runner.jar",
+                        },
+                        "Name": {
+                            "Ref": "Step3Name"
+                        }
+                    },
+                    {
+                        "ActionOnFailure": "CONTINUE",
+                        "HadoopJarStep": {
+                            "Args": [
+                                "spark-submit",
+                                "--deploy-mode",
+                                "cluster",
+                                {
+                                    "Ref": "Step4CodeFileURL"
+                                },
+                                "--s3-training-dataset-dir",
+                                {
+                                    "Ref": "Step4InputURLTraining"
+                                },
+                                "--s3-validation-dataset-dir",
+                                {
+                                    "Ref": "Step4InputURLValidation"
+                                },
+                                "--s3-output-dir",
+                                {
+                                    "Ref": "Step4OutputURL"
+                                },
+                                "--model-type",
+                                {
+                                    "Ref": "Step4ModelType"
+                                },
+                                "--model-params",
+                                {
+                                    "Ref": "Step4ModelParams"
+                                }
+                            ],
+                            "Jar": "command-runner.jar",
+                        },
+                        "Name": {
+                            "Ref": "Step4Name"
+                        }
+                    }
+                ],
+            }
+        },
+        "EMRClusterServiceRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "elasticmapreduce.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+                ],
+                "Path": "/"
+            }
+        },
+        "EMRClusterinstanceProfileRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role"
+                ],
+                "Path": "/"
+            }
+        },
+        "EMRClusterinstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "EMRClusterinstanceProfileRole"
+                    }
+                ]
+            }
+        }
+    },
+    "Outputs": {}
+}
