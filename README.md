@@ -8,7 +8,7 @@ This repository holds a sample code for a PySpark - based Machine Learning model
 
 ## Security of the solution
 
-In order to create a safe solution please follow best practices of Amazon EMR, you can find them [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). The solution is using Amazon S3 to keep the data, in order to secure your buckets follow the best practices outlined [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent).
+In order to create a safe solution please follow best practices of Amazon EMR, you can find them [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). The solution is using Amazon S3 to keep the data, in order to secure your buckets follow the best practices outlined [here.](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent).
 ## Manual run of steps
 Before running the steps automatically with the use of Cloud Formation Template it is worth to walk through the manual process in order to understand the details.
 We start with going to the EMR console and creating new cluster:
