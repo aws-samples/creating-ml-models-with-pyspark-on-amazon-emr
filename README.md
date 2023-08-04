@@ -22,7 +22,7 @@ Basic understanding of Amazon EMR service
 
 * S3 bucket inside your AWS account with downloaded datasets
 
-* Amazon VPC and a subnet available with user tag: `for-use-with-amazon-emr-managed-policies = true` (see more info on it [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role.html)
+* Amazon VPC and a subnet available with user tag: `for-use-with-amazon-emr-managed-policies = true` (see more info on it [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role.html))
 
 The solution will require an S3 bucket with datasets and an S3 bucket for the code inputs/outputs (can be the same bucket). If you want to know how to create an S3 bucket in a secure way head over to AWS documentation on security best practices for Amazon S3.
 ![image](https://github.com/aws-samples/creating-ml-models-with-pyspark-on-amazon-emr/assets/32822344/cfb56698-0ab1-4056-989d-cb229d17be01)
