@@ -25,7 +25,6 @@ Basic understanding of Amazon EMR service
 * Amazon VPC and a subnet available with user tag: `for-use-with-amazon-emr-managed-policies = true` (see more info on it [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role.html))
 
 The solution will require an S3 bucket with datasets and an S3 bucket for the code inputs/outputs (can be the same bucket). If you want to know how to create an S3 bucket in a secure way head over to AWS documentation on security best practices for Amazon S3.
-![image](https://github.com/aws-samples/creating-ml-models-with-pyspark-on-amazon-emr/assets/32822344/cfb56698-0ab1-4056-989d-cb229d17be01)
 
 ## Manual run of steps
 Before running the steps automatically with the use of Cloud Formation Template it is worth to walk through the manual process in order to understand the details.
