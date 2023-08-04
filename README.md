@@ -9,6 +9,24 @@ This repository holds a sample code for a PySpark - based Machine Learning model
 ## Security of the solution
 
 In order to create a safe solution please follow best practices of Amazon EMR, you can find them [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). The solution is using Amazon S3 to keep the data, in order to secure your buckets follow the best practices outlined [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent).
+
+## Prerequisites
+Before you get started, make sure you have the following prerequisites:
+
+* Active AWS account
+
+* Familiarity with Python, and basic understanding of PySpark
+
+* IAM Role to be used for the EMR Instance with permissions to read and write to S3( see more details here.
+Basic understanding of Amazon EMR service
+
+* S3 bucket inside your AWS account with downloaded datasets
+
+* Amazon VPC and a subnet available with user tag: `for-use-with-amazon-emr-managed-policies = true` (see more info on it [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role.html)
+
+The solution will require an S3 bucket with datasets and an S3 bucket for the code inputs/outputs (can be the same bucket). If you want to know how to create an S3 bucket in a secure way head over to AWS documentation on security best practices for Amazon S3.
+![image](https://github.com/aws-samples/creating-ml-models-with-pyspark-on-amazon-emr/assets/32822344/cfb56698-0ab1-4056-989d-cb229d17be01)
+
 ## Manual run of steps
 Before running the steps automatically with the use of Cloud Formation Template it is worth to walk through the manual process in order to understand the details.
 We start with going to the EMR console and creating new cluster:
