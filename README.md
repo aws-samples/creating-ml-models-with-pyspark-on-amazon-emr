@@ -96,10 +96,11 @@ Once you ar familiar with how the steps work in an EMR Cluster you might want to
 
 ![Stack creation](images/stack_creation.png)
 
-Hit Next and you will open the template where you have to fill the fields with corresponding S3 locations. The data you have to provide is the same as with manual process but here it is more user-friendly and easy. 
+Hit Next and you will open the template where you have to fill the fields with corresponding S3 locations. The data you have to provide is the same as with manual process but here it is more user-friendly and easy. Below is the full body of the template with sample entries.
 
-![Stack details](images/stack_details.png)
-
+![Stack details](images/temp1.png)
+![Stack details](images/temp2.png)
+![Stack details](images/temp3.png)
 After filling all the fields select Next. In the Configure stack options step you can create Tags, Stack Policies etc. In our case we leave them as default. Hit Next, review the provided inputs and if everything looks correct select Submit. This will start the creation of your stack. You can follow the progress of stack creation in the CloudFormation console. Once the stack will be created it’s status will change to CREATE_COMPLETE. As with the manual process you can check if the steps run properly by analysing the outputs in S3 location specified. 
 
 ## Usage of CloudFormationTemplate
