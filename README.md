@@ -8,7 +8,7 @@ This repository holds a sample code for a PySpark - based Machine Learning model
 
 ## Security of the solution
 
-In order to create a safe solution please follow best practices of Amazon EMR, you can find them [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). The solution is using Amazon S3 to keep the data, in order to secure your buckets follow the best practices outlined [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent).
+In order to create a safe solution please follow best practices of Amazon EMR, you can find them [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). The solution is using Amazon S3 to keep the data, in order to secure your buckets follow the best practices outlined [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent). If you want to consider creating a disaster recovery solution follow the guidance [here](https://aws.amazon.com/es/blogs/big-data/disaster-recovery-considerations-with-amazon-emr-on-amazon-ec2-for-spark-workloads/).
 
 ## Prerequisites
 Before you get started, make sure you have the following prerequisites:
