@@ -104,7 +104,7 @@ Hit Next and you will open the template where you have to fill the fields with c
 
 After filling all the fields select Next. In the Configure stack options step you can create Tags, Stack Policies etc. In our case we leave them as default. Hit Next, review the provided inputs and if everything looks correct select Submit. This will start the creation of your stack. You can follow the progress of stack creation in the CloudFormation console. Once the stack will be created it’s status will change to CREATE_COMPLETE. As with the manual process you can check if the steps run properly by analysing the outputs in S3 location specified. 
 
-## Usage of CloudFormationTemplate
+## Usage of CDK
 In order to make this cluster part of your Infrastructure as Code (IaC) Templates a CDK (Cloud Development Kit) implementation of the cluster has been prepared to be used. You can find the code under cdk_mlops directory. In order to use it, you have to provide the S3 locations and subnet ID in the _cdk_mlops/cdk_mlops_stack.py_ script. Once you edit your inputs, you can simply run **cdk deploy** command and the infrastructure will be provisioned. If you have not worked with CDK before you can find step by step explanation [here](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html).
 
 
