@@ -9,7 +9,9 @@ This repository holds a sample code for a PySpark - based Machine Learning model
 ## Security of the solution
 Ensuring the security and reliability of your solution is our top priority. As such, we have designed our solution to be compatible with various security configurations, enabling you to apply measures that best suit your organization’s specific requirements.
 To strengthen the security of your solution, we recommend adhering to the best practices for Amazon EMR, which you can find in the following guide [here](https://aws.amazon.com/blogs/big-data/best-practices-for-securing-amazon-emr/). This will assist you in creating a resilient and secure infrastructure for data processing and analytics.
+
 Our solution utilizes Amazon S3 for data storage, offering high scalability, availability, and performance. To bolster the security of your data buckets in Amazon S3, we advise following the best practices outlined in this comprehensive guide [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html#security-best-practices-prevent). Implementing these measures will ensure the secure storage and handling of your data.
+
 Moreover, we understand the importance of preparedness against unforeseen circumstances. In light of this, we recommend considering a disaster recovery solution to safeguard your data and ensure continuity of your operations. Guidance for creating an effective disaster recovery solution can be found in this detailed resource [here](https://aws.amazon.com/es/blogs/big-data/disaster-recovery-considerations-with-amazon-emr-on-amazon-ec2-for-spark-workloads/).
 
 
